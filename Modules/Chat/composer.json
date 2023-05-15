@@ -1,0 +1,23 @@
+{
+    "name": "wangduk/chat",
+    "description": "",
+    "authors": [
+        {
+            "name": "Wang Duk",
+            "email": "wang.dukie@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Chat\\": ""
+        }
+    }
+}

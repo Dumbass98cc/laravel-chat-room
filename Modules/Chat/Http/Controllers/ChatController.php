@@ -32,6 +32,7 @@ class ChatController extends Controller
             'source_user_id' => $user->id,
             'name' => $user->name,
             'message' => $request->get('message'),
+            'socket' => ['socket_id' => $request->get('socket_id')],
         ];
 
         event(new ChatMessage($message));

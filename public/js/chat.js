@@ -30824,8 +30824,8 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_4___default.a.use(vue_resource__WEBPACK_IMPORTED_MODULE_1__["default"]);
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_2__["default"]({
   broadcaster: 'pusher',
-  key: 'process.env.MIX_PUSHER_APP_KEY',
-  cluster: 'process.env.MIX_PUSHER_APP_CLUSTER'
+  key: "db206ee077b22f65d208",
+  cluster: "ap1"
 });
 var app = new vue__WEBPACK_IMPORTED_MODULE_4___default.a({
   el: '#chat-app',
@@ -30840,18 +30840,18 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4___default.a({
   },
   created: function created() {
     var _this = this;
-    window.Echo.channel('chat-message' + window.userid).listen('ChatMessage', function (e) {
-      console.log(e.user);
-      _this.userId = e.user.sourceuserid;
+    window.Echo.channel('chat-message-' + window.user_id).listen('.ChatMessage', function (e) {
+      console.log(e);
+      _this.userId = e.message.source_user_id;
       if (_this.chats[_this.userId]) {
         _this.show = 1;
-        _this.$set(app.chats[_this.userId], _this.chatCount[_this.userId], e.user);
+        _this.$set(app.chats[_this.userId], _this.chatCount[_this.userId], e.message);
         _this.chatCount[_this.userId]++;
         console.log("pusher");
         console.log(_this.chats[_this.userId]);
       } else {
-        _this.createChatWindow(e.user.sourceuserid, e.user.name);
-        _this.$set(app.chats[_this.userId], _this.chatCount[_this.userId], e.user);
+        _this.createChatWindow(e.message.source_user_id, e.message.name);
+        _this.$set(app.chats[_this.userId], _this.chatCount[_this.userId], e.message);
         _this.chatCount[_this.userId]++;
       }
     });
@@ -30868,7 +30868,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4___default.a({
       var message = this.chatMessage[this.userId];
       this.$http.post('chat/send', {
         'user_id': this.userId,
-        'message': message
+        'message': message,
+        'socket_id': window.Echo.socketId()
       }).then(function (response) {
         _this2.chatMessage[_this2.userId] = '';
         _this2.$set(app.chats[_this2.userId], _this2.chatCount[_this2.userId], {
@@ -30888,14 +30889,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_4___default.a({
       this.createChatWindow(this.userId, event.target.innerHTML);
       console.log(this.userId);
     },
-    createChatWindow: function createChatWindow(userid, username) {
-      if (!this.chatWindowStatus[userid]) {
-        this.chatWindowStatus[userid] = 1;
-        this.chatMessage[userid] = '';
-        this.$set(app.chats, userid, {});
-        this.$set(app.chatCount, userid, 0);
+    createChatWindow: function createChatWindow(user_id, username) {
+      if (!this.chatWindowStatus[user_id]) {
+        this.chatWindowStatus[user_id] = 1;
+        this.chatMessage[user_id] = '';
+        this.$set(app.chats, user_id, {});
+        this.$set(app.chatCount, user_id, 0);
         this.chatWindows.push({
-          "senderid": userid,
+          "senderid": user_id,
           "name": username
         });
       }
